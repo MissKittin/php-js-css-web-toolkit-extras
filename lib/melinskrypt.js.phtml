@@ -1,0 +1,80 @@
+<?php
+	/*
+	 * melinskrypt.js library test
+	 *
+	 * Note:
+	 *  looks for a library at ../lib
+	 *  looks for a library at ..
+	 */
+
+	if(
+		(!is_file(__DIR__.'/../lib/'.basename(__FILE__, '.phtml'))) &&
+		(!is_file(__DIR__.'/../'.basename(__FILE__, '.phtml')))
+	){
+		echo __DIR__.'/../lib/'.basename(__FILE__, '.phtml').' is not a file'.PHP_EOL;
+		echo __DIR__.'/../'.basename(__FILE__, '.phtml').' is not a file'.PHP_EOL;
+		exit();
+	}
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script>
+			document.addEventListener('DOMContentLoaded', function(){
+				<?php
+					if(is_file(__DIR__.'/../lib/'.basename(__FILE__, '.phtml')))
+						require __DIR__.'/../lib/'.basename(__FILE__, '.phtml');
+					else if(is_file(__DIR__.'/../'.basename(__FILE__, '.phtml')))
+						require __DIR__.'/../'.basename(__FILE__, '.phtml');
+				?>
+
+				melinskrypt(document.getElementById('kurwized'));
+
+				var words=document.getElementById('kurwized').innerHTML.split(' ');
+
+				for(var i=0; i<words.length; i++)
+				{
+					if(
+						(words[i] === 'elo') ||
+						(words[i] === 'benc') ||
+						(words[i] === 'kurwa') ||
+						(words[i] === 'ogunie') ||
+						(words[i] === 'awizisie') ||
+						(words[i] === 'tego') ||
+						(words[i] === 'typu') ||
+						(words[i] === 'akat')
+					)
+						words[i]='<span style="color: #0000ff;">'+words[i]+'</span>';
+				}
+
+				document.getElementById('kurwized').innerHTML=words.join(' ');
+
+				words=document.getElementById('not-kurwized').innerHTML.split(' ');
+
+				for(var i=0; i<words.length; i++)
+				{
+					if(
+						(words[i] === 'elo') ||
+						(words[i] === 'benc') ||
+						(words[i] === 'kurwa') ||
+						(words[i] === 'ogunie') ||
+						(words[i] === 'awizisie') ||
+						(words[i] === 'tego') ||
+						(words[i] === 'typu') ||
+						(words[i] === 'akat')
+					)
+						words[i]='<span style="color: #ff0000;">'+words[i]+'</span>';
+				}
+
+				document.getElementById('not-kurwized').innerHTML=words.join(' ');
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Melinized</h1>
+		<div id="kurwized">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nulla nisi, aliquet eu accumsan rhoncus, pellentesque sit amet turpis. Donec pretium euismod suscipit. Duis elementum, purus non mattis pulvinar, ex eros volutpat libero, quis scelerisque ipsum magna sit amet ligula. Sed consectetur elit a feugiat porttitor. Integer ante dui, sollicitudin nec magna sit amet, porttitor ultrices nisl. Mauris ultrices egestas nibh at tempus. Vivamus in purus nisl. Fusce condimentum quam eget felis imperdiet pellentesque. Ut non ultricies arcu. Suspendisse vitae rutrum magna, eget ornare magna. Praesent sodales justo ut nunc dignissim, non lobortis mi rhoncus. Suspendisse nunc velit, mollis ut velit non, sagittis volutpat enim. Etiam hendrerit id ex eu placerat. Cras congue maximus semper.</div>
+		<h1>Not melinized</h1>
+		<div id="not-kurwized">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nulla nisi, aliquet eu accumsan rhoncus, pellentesque sit amet turpis. Donec pretium euismod suscipit. Duis elementum, purus non mattis pulvinar, ex eros volutpat libero, quis scelerisque ipsum magna sit amet ligula. Sed consectetur elit a feugiat porttitor. Integer ante dui, sollicitudin nec magna sit amet, porttitor ultrices nisl. Mauris ultrices egestas nibh at tempus. Vivamus in purus nisl. Fusce condimentum quam eget felis imperdiet pellentesque. Ut non ultricies arcu. Suspendisse vitae rutrum magna, eget ornare magna. Praesent sodales justo ut nunc dignissim, non lobortis mi rhoncus. Suspendisse nunc velit, mollis ut velit non, sagittis volutpat enim. Etiam hendrerit id ex eu placerat. Cras congue maximus semper.</div>
+	</body>
+</html>
