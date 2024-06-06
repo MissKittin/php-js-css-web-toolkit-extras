@@ -5,7 +5,49 @@
 	 * Note:
 	 *  looks for a library at ../lib
 	 *  looks for a library at ..
+	 *  also looks for additional libraries at TK_LIB env variable
+	 *
+	 * Warning:
+	 *  var_export_contains.php library is required
 	 */
+
+	echo ' -> Including var_export_contains.php';
+		if(is_file(__DIR__.'/../lib/var_export_contains.php'))
+		{
+			if(@(include __DIR__.'/../lib/var_export_contains.php') === false)
+			{
+				echo ' [FAIL]'.PHP_EOL;
+				exit(1);
+			}
+		}
+		else if(is_file(__DIR__.'/../var_export_contains.php'))
+		{
+			if(@(include __DIR__.'/../var_export_contains.php') === false)
+			{
+				echo ' [FAIL]'.PHP_EOL;
+				exit(1);
+			}
+		}
+		else if(getenv('TK_LIB') !== false)
+		{
+			foreach(explode("\n", getenv('TK_LIB')) as $_tk_dir)
+				if(is_file($_tk_dir.'/var_export_contains.php'))
+				{
+					if(@(include $_tk_dir.'/var_export_contains.php') === false)
+					{
+						echo ' [FAIL]'.PHP_EOL;
+						exit(1);
+					}
+
+					break;
+				}
+		}
+		else
+		{
+			echo ' [FAIL]'.PHP_EOL;
+			exit(1);
+		}
+	echo ' [ OK ]'.PHP_EOL;
 
 	echo ' -> Including '.basename(__FILE__);
 		if(is_file(__DIR__.'/../lib/'.basename(__FILE__)))
@@ -34,16 +76,6 @@
 	function is_float_equal($input, $expected_result)
 	{
 		if(abs($input-$expected_result) < 0.00001)
-			return true;
-
-		return false;
-	}
-	function var_export_contains($input, $content, $print=false)
-	{
-		if($print)
-			return str_replace(["\n", ' '], '', var_export($input, true));
-
-		if(str_replace(["\n", ' '], '', var_export($input, true)) === $content)
 			return true;
 
 		return false;
