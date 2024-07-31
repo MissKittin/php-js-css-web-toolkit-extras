@@ -146,8 +146,7 @@
 	foreach([
 		'greatest_common_divisor_iteratively',
 		'greatest_common_divisor_recursively'
-	] as $function)
-	{
+	] as $function){
 		echo ' -> Testing '.$function;
 			if($function(54, 24) === 6)
 				echo ' [ OK ]';

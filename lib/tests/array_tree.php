@@ -76,8 +76,7 @@
 	$failed=false;
 
 	echo ' -> Testing array_flat2tree';
-		$nested_array=array_flat2tree
-		(
+		$nested_array=array_flat2tree(
 			[
 				[0, null, 'content0|description0'],
 				[1, null, 'content1|description1'],
@@ -126,6 +125,7 @@
 			function($key, $value, $depth)
 			{
 				$content=explode('|', $key);
+
 				if(empty($value))
 					return'[SINGLE_NODE] '.$content[0].'|'.$content[1].'|'.$depth.PHP_EOL;
 				else
@@ -143,7 +143,6 @@
 					return '[CLOSE_SUBROOT]'.PHP_EOL;
 			}
 		);
-
 		if(str_replace(PHP_EOL, '', $result) === '[OPEN_ROOT][OPEN_NODE][SINGLE_NODE] content0|description0|0[CLOSE_NODE][OPEN_NODE][SINGLE_NODE] content1|description1|0[CLOSE_NODE][OPEN_NODE][SUBROOT_LABEL] content3|description3|0[OPEN_SUBROOT][OPEN_NODE][SUBROOT_LABEL] content2|description2|1[OPEN_SUBROOT][OPEN_NODE][SUBROOT_LABEL] content4|description4|2[OPEN_SUBROOT][OPEN_NODE][SINGLE_NODE] content6|description6|3[CLOSE_NODE][CLOSE_SUBROOT][CLOSE_NODE][OPEN_NODE][SINGLE_NODE] content8|description8|2[CLOSE_NODE][CLOSE_SUBROOT][CLOSE_NODE][CLOSE_SUBROOT][CLOSE_NODE][OPEN_NODE][SUBROOT_LABEL] content5|description5|0[OPEN_SUBROOT][OPEN_NODE][SINGLE_NODE] content9|description9|1[CLOSE_NODE][CLOSE_SUBROOT][CLOSE_NODE][OPEN_NODE][SINGLE_NODE] content7|description7|0[CLOSE_NODE][CLOSE_ROOT]')
 			echo ' [ OK ]'.PHP_EOL;
 		else

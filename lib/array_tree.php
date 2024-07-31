@@ -121,39 +121,33 @@
 		 * you can use return instead of echo
 		 *
 		 * Example input array:
-		 *	array(5)
-		 *	{
-		 *		["content0|description0"]=>array(0){}
-		 *		["content1|description1"]=>array(0){}
-		 *		["content3|description3"]=>array(1)
-		 *		{
-		 *			["content2|description2"]=>array(2)
-		 *			{
-		 *				["content4|description4"]=>array(1)
-		 *				{
-		 *					["content6|description6"]=>array(0){}
-		 *				}
-		 *				["content8|description8"]=>array(0){}
-		 *			}
-		 *		}
-		 *		["content5|description5"]=>array(1)
-		 *		{
-		 *			["content9|description9"]=>array(0){}
-		 *		}
-		 *		["content7|description7"]=>array(0){}
-		 *	}
+			[
+				['content0|description0']=>[],
+				['content1|description1']=>[],
+				['content3|description3']=>[
+					['content2|description2']=>[
+						['content4|description4']=>[
+							['content6|description6']=>[]
+						],
+						['content8|description8']=>[]
+					]
+				],
+				['content5|description5']=>[
+					['content9|description9']=>[]
+				],
+				['content7|description7']=>[]
+			]
 		 * can be from array_flat2tree()
 		 */
 
-		$return='';
+		$return=$open_tree($input_array, $current_depth);
 
-		$return.=$open_tree($input_array, $current_depth);
 		foreach($input_array as $key=>$value)
 		{
 			$return.=$open_node($key, $value, $current_depth);
 			$return.=$print_node_element($key, $value, $current_depth);
-
 			$depth=$current_depth;
+
 			if(!empty($value))
 				$return.=(__METHOD__)(
 					$value,
@@ -167,8 +161,7 @@
 
 			$return.=$close_node($key, $value, $current_depth);
 		}
-		$return.=$close_tree($input_array, $current_depth);
 
-		return $return;
+		return $return.$close_tree($input_array, $current_depth);
 	}
 ?>

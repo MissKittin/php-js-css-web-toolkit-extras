@@ -29,12 +29,11 @@
 						require __DIR__.'/../'.basename(__FILE__, '.phtml');
 				?>
 
-				melinskrypt(document.getElementById('kurwized'));
+				melinskrypt(document.getElementById('melinized'));
 
-				var words=document.getElementById('kurwized').innerHTML.split(' ');
+				var words=document.getElementById('melinized').innerHTML.split(' ');
 
 				for(var i=0; i<words.length; i++)
-				{
 					if(
 						(words[i] === 'elo') ||
 						(words[i] === 'benc') ||
@@ -46,14 +45,11 @@
 						(words[i] === 'akat')
 					)
 						words[i]='<span style="color: #0000ff;">'+words[i]+'</span>';
-				}
 
-				document.getElementById('kurwized').innerHTML=words.join(' ');
-
-				words=document.getElementById('not-kurwized').innerHTML.split(' ');
+				document.getElementById('melinized').innerHTML=words.join(' ');
+				words=document.getElementById('not-melinized').innerHTML.split(' ');
 
 				for(var i=0; i<words.length; i++)
-				{
 					if(
 						(words[i] === 'elo') ||
 						(words[i] === 'benc') ||
@@ -65,16 +61,19 @@
 						(words[i] === 'akat')
 					)
 						words[i]='<span style="color: #ff0000;">'+words[i]+'</span>';
-				}
 
-				document.getElementById('not-kurwized').innerHTML=words.join(' ');
-			});
+				document.getElementById('not-melinized').innerHTML=words.join(' ');
+			}, false);
 		</script>
 	</head>
 	<body>
 		<h1>Melinized</h1>
-		<div id="kurwized">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nulla nisi, aliquet eu accumsan rhoncus, pellentesque sit amet turpis. Donec pretium euismod suscipit. Duis elementum, purus non mattis pulvinar, ex eros volutpat libero, quis scelerisque ipsum magna sit amet ligula. Sed consectetur elit a feugiat porttitor. Integer ante dui, sollicitudin nec magna sit amet, porttitor ultrices nisl. Mauris ultrices egestas nibh at tempus. Vivamus in purus nisl. Fusce condimentum quam eget felis imperdiet pellentesque. Ut non ultricies arcu. Suspendisse vitae rutrum magna, eget ornare magna. Praesent sodales justo ut nunc dignissim, non lobortis mi rhoncus. Suspendisse nunc velit, mollis ut velit non, sagittis volutpat enim. Etiam hendrerit id ex eu placerat. Cras congue maximus semper.</div>
+		<div id="melinized">
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nulla nisi, aliquet eu accumsan rhoncus, pellentesque sit amet turpis. Donec pretium euismod suscipit. Duis elementum, purus non mattis pulvinar, ex eros volutpat libero, quis scelerisque ipsum magna sit amet ligula. Sed consectetur elit a feugiat porttitor. Integer ante dui, sollicitudin nec magna sit amet, porttitor ultrices nisl. Mauris ultrices egestas nibh at tempus. Vivamus in purus nisl. Fusce condimentum quam eget felis imperdiet pellentesque. Ut non ultricies arcu. Suspendisse vitae rutrum magna, eget ornare magna. Praesent sodales justo ut nunc dignissim, non lobortis mi rhoncus. Suspendisse nunc velit, mollis ut velit non, sagittis volutpat enim. Etiam hendrerit id ex eu placerat. Cras congue maximus semper.
+		</div>
 		<h1>Not melinized</h1>
-		<div id="not-kurwized">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nulla nisi, aliquet eu accumsan rhoncus, pellentesque sit amet turpis. Donec pretium euismod suscipit. Duis elementum, purus non mattis pulvinar, ex eros volutpat libero, quis scelerisque ipsum magna sit amet ligula. Sed consectetur elit a feugiat porttitor. Integer ante dui, sollicitudin nec magna sit amet, porttitor ultrices nisl. Mauris ultrices egestas nibh at tempus. Vivamus in purus nisl. Fusce condimentum quam eget felis imperdiet pellentesque. Ut non ultricies arcu. Suspendisse vitae rutrum magna, eget ornare magna. Praesent sodales justo ut nunc dignissim, non lobortis mi rhoncus. Suspendisse nunc velit, mollis ut velit non, sagittis volutpat enim. Etiam hendrerit id ex eu placerat. Cras congue maximus semper.</div>
+		<div id="not-melinized">
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nulla nisi, aliquet eu accumsan rhoncus, pellentesque sit amet turpis. Donec pretium euismod suscipit. Duis elementum, purus non mattis pulvinar, ex eros volutpat libero, quis scelerisque ipsum magna sit amet ligula. Sed consectetur elit a feugiat porttitor. Integer ante dui, sollicitudin nec magna sit amet, porttitor ultrices nisl. Mauris ultrices egestas nibh at tempus. Vivamus in purus nisl. Fusce condimentum quam eget felis imperdiet pellentesque. Ut non ultricies arcu. Suspendisse vitae rutrum magna, eget ornare magna. Praesent sodales justo ut nunc dignissim, non lobortis mi rhoncus. Suspendisse nunc velit, mollis ut velit non, sagittis volutpat enim. Etiam hendrerit id ex eu placerat. Cras congue maximus semper.
+		</div>
 	</body>
 </html>

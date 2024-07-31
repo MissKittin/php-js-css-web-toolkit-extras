@@ -21,10 +21,19 @@
 	<head>
 		<meta charset="utf-8">
 		<style>
-			.tree,.tree ul,.tree ol{list-style-type:none;}
-			.tree li span{cursor:pointer;}
-			.tree li .tree_open_tick::before{content:"\25B6";margin-right:6px;}
-			.tree li .tree_opened::before{content:"\25BC";}
+			.tree, .tree ul, .tree ol {
+				list-style-type: none;
+			}
+			.tree li span {
+				cursor: pointer;
+			}
+			.tree li .tree_open_tick::before {
+				content: "\25B6";
+				margin-right: 6px;
+			}
+			.tree li .tree_opened::before {
+				content: "\25BC";
+			}
 		</style>
 		<script>
 			document.addEventListener('DOMContentLoaded', function(){

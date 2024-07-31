@@ -9,7 +9,24 @@
 	 *
 	 * Warning:
 	 *  rmdir_recursive.php library is required
+	 *  check_var.php library is required
+	 *  global_variable_streamer.php library is required
+	 *  strip_php_comments.php library is required
 	 */
+
+	function find_the_lib($library)
+	{
+		if(is_file(__DIR__.'/../../lib/'.$library))
+			return __DIR__.'/../../lib/'.$library;
+
+		if(getenv('TK_LIB') !== false)
+			foreach(explode("\n", getenv('TK_LIB')) as $_tk_dir)
+				if(is_file($_tk_dir.'/'.$library))
+					return $_tk_dir.'/'.$library;
+
+		echo ' [FAIL]'.PHP_EOL;
+		exit(1);
+	}
 
 	if(!is_file(__DIR__.'/../'.basename(__FILE__)))
 	{
@@ -56,9 +73,9 @@
 	echo ' -> Creating test directory';
 		mkdir(__DIR__.'/tmp/include2blob/lib');
 		mkdir(__DIR__.'/tmp/include2blob/src');
-		copy(__DIR__.'/../../lib/check_var.php', __DIR__.'/tmp/include2blob/lib/check_var.php');
-		copy(__DIR__.'/../../lib/global_variable_streamer.php', __DIR__.'/tmp/include2blob/lib/global_variable_streamer.php');
-		copy(__DIR__.'/../../lib/strip_php_comments.php', __DIR__.'/tmp/include2blob/lib/strip_php_comments.php');
+		copy(find_the_lib('check_var.php'), __DIR__.'/tmp/include2blob/lib/check_var.php');
+		copy(find_the_lib('global_variable_streamer.php'), __DIR__.'/tmp/include2blob/lib/global_variable_streamer.php');
+		copy(find_the_lib('strip_php_comments.php'), __DIR__.'/tmp/include2blob/lib/strip_php_comments.php');
 		copy(__DIR__.'/../include2blob.php', __DIR__.'/tmp/include2blob/include2blob.php');
 		file_put_contents(__DIR__.'/tmp/include2blob/src/main.php', '<?php
 			echo "main";

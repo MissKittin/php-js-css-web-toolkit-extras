@@ -43,9 +43,8 @@
 						break;
 					}
 			}
-			else
-				if($required)
-					throw new Exception($library.' library not found');
+			else if($required)
+				throw new Exception($library.' library not found');
 	}
 
 	try {
@@ -60,6 +59,7 @@
 	}
 
 	$ignore_include_errors=false;
+
 	if(check_argv('--ignore-include-errors'))
 		$ignore_include_errors=true;
 
@@ -70,13 +70,17 @@
 			if(!file_exists($matches[2]))
 			{
 				if($GLOBALS['ignore_include_errors'])
-					return '/* include file '.$matches[2].' not found */'.PHP_EOL;
+					return '/* include file '.$matches[2].' not found */'."\n";
 				else
-					die($matches[2].' not exists');
+				{
+					echo $matches[2].' not exists'.PHP_EOL;
+					exit(1);
+				}
 			}
 
-			return ' /* start include file '.$matches[2].' */ '.PHP_EOL.'?>'.include2blob(strip_php_comments(file_get_contents($matches[2]))).'<?php /* end include file '.$matches[2].' */ '.PHP_EOL;
+			return ' /* start include file '.$matches[2].' */ '."\n".'?>'.include2blob(strip_php_comments(file_get_contents($matches[2]))).'<?php /* end include file '.$matches[2].' */ '."\n";
 		}
+
 		$_SERVER['argv'][]='--no-compress';
 	}
 	else
@@ -86,9 +90,12 @@
 			if(!file_exists($matches[2]))
 			{
 				if($GLOBALS['ignore_include_errors'])
-					return '/* include file '.$matches[2].' not found */'.PHP_EOL;
+					return '/* include file '.$matches[2].' not found */'."\n";
 				else
-					die($matches[2].' not exists');
+				{
+					echo $matches[2].' not exists'.PHP_EOL;
+					exit(1);
+				}
 			}
 
 			return '?>'.include2blob(strip_php_comments(file_get_contents($matches[2]))).'<?php ';
@@ -111,6 +118,7 @@
 
 		exit(1);
 	}
+
 	if(!file_exists($argv[1]))
 		die($argv[1].' not exists');
 
