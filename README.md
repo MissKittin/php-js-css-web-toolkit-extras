@@ -15,7 +15,7 @@ Unofficial additions
 * `sec_prevent_direct.php` - hide directory existence (for historical purposes)
 * `wake_on_lan.php` - send WOL package from PHP
 
-## Javascript libraries
+## JavaScript libraries (ES6)
 * `list2tree.js` - convert ul or ol to expandable tree
 * `loremIpsumGenerator.js` - Mathew Tinsley's lorem ipsum generator (BSD-3-Clause)
 * `melinskrypt.js` - kurwoskrypt modification (unknown license)

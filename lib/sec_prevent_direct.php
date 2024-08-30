@@ -9,8 +9,8 @@
 	class prevent_index_exception extends Exception {}
 
 	function prevent_index(
-		string $redirect_page_content=null,
-		string $redirect_page_content_type=null
+		?string $redirect_page_content=null,
+		?string $redirect_page_content_type=null
 	){
 		/*
 		 * index.php 404 not found
@@ -48,9 +48,9 @@
 	}
 	function prevent_direct(
 		string $script_name,
-		string $redirect_page_content=null,
-		string $redirect_page_content_type=null,
-		callable $log_callback=null
+		?string $redirect_page_content=null,
+		?string $redirect_page_content_type=null,
+		?callable $log_callback=null
 	){
 		/*
 		 * Extension for prevent_index()
