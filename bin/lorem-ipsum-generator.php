@@ -11,34 +11,6 @@
 	 *  getenv(TK_LIB)
 	 */
 
-	function load_library($libraries, $required=true)
-	{
-		foreach($libraries as $library)
-			if(file_exists(__DIR__.'/lib/'.$library))
-				require __DIR__.'/lib/'.$library;
-			else if(file_exists(__DIR__.'/../lib/'.$library))
-				require __DIR__.'/../lib/'.$library;
-			else if(getenv('TK_LIB') !== false)
-			{
-				foreach(explode("\n", getenv('TK_LIB')) as $_tk_dir)
-					if(is_file($_tk_dir.'/'.$library))
-					{
-						require $_tk_dir.'/'.$library;
-						break;
-					}
-			}
-			else
-				if($required)
-					throw new Exception($library.' library not found');
-	}
-
-	try {
-		load_library(['lorem_ipsum_generator.php']);
-	} catch(Exception $error) {
-		echo 'Error: '.$error->getMessage().PHP_EOL;
-		exit(1);
-	}
-
 	function convert_eol($input, $eol)
 	{
 		switch($eol)
@@ -50,6 +22,41 @@
 		}
 
 		return $input;
+	}
+	function load_library($libraries, $required=true)
+	{
+		foreach($libraries as $library)
+		{
+			if(file_exists(__DIR__.'/lib/'.$library))
+			{
+				require __DIR__.'/lib/'.$library;
+				continue;
+			}
+
+			if(file_exists(__DIR__.'/../lib/'.$library))
+			{
+				require __DIR__.'/../lib/'.$library;
+				continue;
+			}
+
+			if(getenv('TK_LIB') !== false)
+				foreach(explode("\n", getenv('TK_LIB')) as $_tk_dir)
+					if(is_file($_tk_dir.'/'.$library))
+					{
+						require $_tk_dir.'/'.$library;
+						continue 2;
+					}
+
+			if($required)
+				throw new Exception($library.' library not found');
+		}
+	}
+
+	try {
+		load_library(['lorem_ipsum_generator.php']);
+	} catch(Exception $error) {
+		echo 'Error: '.$error->getMessage().PHP_EOL;
+		exit(1);
 	}
 
 	$exit=0;
@@ -96,12 +103,21 @@
 
 			if(isset($argv[3]))
 				$start_tag=$argv[3];
+
 			if(isset($argv[4]))
 				$end_tag=$argv[4];
+
 			if(isset($argv[5]))
 				$eol=$argv[5];
 
-			echo convert_eol(generate_lorem_ipsum_b($argv[2], $start_tag, $end_tag), $eol);
+			echo convert_eol(
+				generate_lorem_ipsum_b(
+					$argv[2],
+					$start_tag,
+					$end_tag
+				),
+				$eol
+			);
 		break;
 		case 'words':
 			$words=30;
@@ -114,27 +130,42 @@
 
 			if(isset($argv[2]))
 				$words=$argv[2];
+
 			if(isset($argv[3]))
 				$paragraphs=$argv[3];
-			if(isset($argv[4]) && ($argv[4] === 'swl'))
+
+			if(
+				isset($argv[4]) &&
+				($argv[4] === 'swl')
+			)
 				$start_with_lipsum=true;
-			if(isset($argv[5]) && ($argv[5] === 'dn'))
+
+			if(
+				isset($argv[5]) &&
+				($argv[5] === 'dn')
+			)
 				$double_newline=true;
+
 			if(isset($argv[6]))
 				$start_tag=$argv[6];
+
 			if(isset($argv[7]))
 				$end_tag=$argv[7];
+
 			if(isset($argv[8]))
 				$eol=$argv[8];
 
-			echo convert_eol(generate_lorem_ipsum_wp(
-				$words,
-				$paragraphs,
-				$start_with_lipsum,
-				$double_newline,
-				$start_tag,
-				$end_tag
-			), $eol);
+			echo convert_eol(
+				generate_lorem_ipsum_wp(
+					$words,
+					$paragraphs,
+					$start_with_lipsum,
+					$double_newline,
+					$start_tag,
+					$end_tag
+				),
+				$eol
+			);
 		break;
 	}
 ?>

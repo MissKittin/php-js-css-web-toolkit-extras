@@ -5,6 +5,7 @@
 	 *
 	 * Note:
 	 *  this toy also processes include () in child files
+	 *  supports include, include_once, require and require_once
 	 *  supports include 'file'; include('file'); and include ( 'file' ) ;
 	 *
 	 * Warning:
@@ -30,21 +31,30 @@
 	function load_library($libraries, $required=true)
 	{
 		foreach($libraries as $library)
+		{
 			if(file_exists(__DIR__.'/lib/'.$library))
-				require __DIR__.'/lib/'.$library;
-			else if(file_exists(__DIR__.'/../lib/'.$library))
-				require __DIR__.'/../lib/'.$library;
-			else if(getenv('TK_LIB') !== false)
 			{
+				require __DIR__.'/lib/'.$library;
+				continue;
+			}
+
+			if(file_exists(__DIR__.'/../lib/'.$library))
+			{
+				require __DIR__.'/../lib/'.$library;
+				continue;
+			}
+
+			if(getenv('TK_LIB') !== false)
 				foreach(explode("\n", getenv('TK_LIB')) as $_tk_dir)
 					if(is_file($_tk_dir.'/'.$library))
 					{
 						require $_tk_dir.'/'.$library;
-						break;
+						continue 2;
 					}
-			}
-			else if($required)
+
+			if($required)
 				throw new Exception($library.' library not found');
+		}
 	}
 
 	try {
@@ -71,14 +81,19 @@
 			{
 				if($GLOBALS['ignore_include_errors'])
 					return '/* include file '.$matches[2].' not found */'."\n";
-				else
-				{
-					echo $matches[2].' not exists'.PHP_EOL;
-					exit(1);
-				}
+
+				echo $matches[2].' not exists'.PHP_EOL;
+				exit(1);
 			}
 
-			return ' /* start include file '.$matches[2].' */ '."\n".'?>'.include2blob(strip_php_comments(file_get_contents($matches[2]))).'<?php /* end include file '.$matches[2].' */ '."\n";
+			return ''
+			.	' /* start include file '.$matches[2].' */ '."\n".'?>'
+			.	include2blob(
+					strip_php_comments(
+						file_get_contents($matches[2])
+					)
+				)
+			.	'<?php /* end include file '.$matches[2].' */ '."\n";
 		}
 
 		$_SERVER['argv'][]='--no-compress';
@@ -91,48 +106,79 @@
 			{
 				if($GLOBALS['ignore_include_errors'])
 					return '/* include file '.$matches[2].' not found */'."\n";
-				else
-				{
-					echo $matches[2].' not exists'.PHP_EOL;
-					exit(1);
-				}
+
+				echo $matches[2].' not exists'.PHP_EOL;
+				exit(1);
 			}
 
-			return '?>'.include2blob(strip_php_comments(file_get_contents($matches[2]))).'<?php ';
+			return ''
+			.	'?>'
+			.	include2blob(
+					strip_php_comments(
+						file_get_contents($matches[2])
+					)
+				)
+			.	'<?php ';
 		}
 	}
 	function include2blob($file_content)
 	{
-		$file_content=preg_replace_callback('/include\s*\(?\s*(\'|")(.*)(\'|")\s*\)?\s*;/', 'open_file', $file_content);
-		$file_content=preg_replace_callback('/include_once\s*\(?\s*(\'|")(.*)(\'|")\s*\)?\s*;/', 'open_file', $file_content);
-		$file_content=preg_replace_callback('/require\s*\(?\s*(\'|")(.*)(\'|")\s*\)?\s*;/', 'open_file', $file_content);
-		$file_content=preg_replace_callback('/require_once\s*\(?\s*(\'|")(.*)(\'|")\s*\)?\s*;/', 'open_file', $file_content);
-
-		return $file_content;
+		return preg_replace_callback(
+			'/require_once\s*\(?\s*(\'|")(.*)(\'|")\s*\)?\s*;/',
+			'open_file',
+			preg_replace_callback(
+				'/require\s*\(?\s*(\'|")(.*)(\'|")\s*\)?\s*;/',
+				'open_file',
+				preg_replace_callback(
+					'/include_once\s*\(?\s*(\'|")(.*)(\'|")\s*\)?\s*;/',
+					'open_file',
+					preg_replace_callback(
+						'/include\s*\(?\s*(\'|")(.*)(\'|")\s*\)?\s*;/',
+						'open_file',
+						$file_content
+					)
+				)
+			)
+		);
 	}
 
 	if(!isset($argv[1]))
 	{
 		echo 'No file name given'.PHP_EOL;
-		echo 'Usage: include2blob.php path/to/file.php [--debug] [--no-compress] [--ignore-include-errors]'.PHP_EOL;
-
+		echo 'Usage: '.$argv[0].' path/to/file.php [--debug] [--no-compress] [--ignore-include-errors]'.PHP_EOL;
 		exit(1);
 	}
 
 	if(!file_exists($argv[1]))
-		die($argv[1].' not exists');
+	{
+		echo $argv[1].' not exists'.PHP_EOL;
+		exit(1);
+	}
 
 	global_variable_streamer::register_wrapper('gvs');
 
-	$file_content=include2blob(strip_php_comments(file_get_contents($argv[1])));
+	$file_content=include2blob(
+		strip_php_comments(
+			file_get_contents($argv[1])
+		)
+	);
 
 	if(!check_argv('--no-compress'))
-	{
-		$file_content=php_strip_whitespace('gvs://file_content');
-		$file_content=preg_replace('/ \?><\?php\s*/', ' ', $file_content);
-		$file_content=preg_replace('/<\?php\s+/', '<?php ', $file_content);
-		$file_content=preg_replace('/<\?php\s*\?>/', '', $file_content);
-	}
+		$file_content=preg_replace(
+			'/<\?php\s*\?>/',
+			'',
+			preg_replace(
+				'/<\?php\s+/',
+				'<?php ',
+				preg_replace(
+					'/ \?><\?php\s*/',
+					' ',
+					php_strip_whitespace(
+						'gvs://file_content'
+					)
+				)
+			)
+		);
 
 	echo $file_content;
 ?>
