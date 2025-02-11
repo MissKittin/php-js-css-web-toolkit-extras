@@ -11,10 +11,12 @@
 	 *  __DIR__/vendor
 	 *  __DIR__/../composer/vendor
 	 *  __DIR__/../vendor
+	 *  getenv(TK_COMPOSER)
 	 *
 	 * lib directory path:
 	 *  __DIR__/lib
 	 *  __DIR__/../lib
+	 *  getenv(TK_LIB)
 	 */
 
 	function load_library($libraries, $required=true)
@@ -33,6 +35,14 @@
 				continue;
 			}
 
+			if(getenv('TK_LIB') !== false)
+				foreach(explode("\n", getenv('TK_LIB')) as $_tk_dir)
+					if(is_file($_tk_dir.'/'.$library))
+					{
+						require $_tk_dir.'/'.$library;
+						continue 2;
+					}
+
 			if($required)
 				throw new Exception($library.' library not found');
 		}
@@ -47,6 +57,14 @@
 		] as $composer_path)
 			if(is_file(__DIR__.'/'.$composer_path))
 				return __DIR__.'/'.$composer_path;
+
+		$TK_COMPOSER=getenv('TK_COMPOSER');
+
+		if(
+			($TK_COMPOSER !== false) &&
+			is_file($TK_COMPOSER.'/autoload.php')
+		)
+			return $TK_COMPOSER.'/autoload.php';
 
 		throw new Exception('Composer autoloader not found');
 	}

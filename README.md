@@ -25,7 +25,7 @@ Unofficial additions
 * `wp_is_serialized.php` - check if string is serialized data - function from Wordpress (GNU GPL2)
 
 ## JavaScript libraries (ES6)
+* `kurwoskrypt.js` - inserts the word "kurwa" in random places (Attribution)
 * `list2tree.js` - convert ul or ol to expandable tree
 * `loremIpsumGenerator.js` - Mathew Tinsley's lorem ipsum generator (BSD-3-Clause)
 * `melinskrypt.js` - kurwoskrypt modification (unknown license)
-* `kurwoskrypt.js` - inserts the word "kurwa" in random places (Attribution)
