@@ -15,19 +15,28 @@
 
 	class wake_on_lan_exception extends Exception {}
 
-	if(extension_loaded('sockets'))
+	if(function_exists('socket_create'))
 	{
 		function wake_on_lan(
 			string $mac,
 			string $broadcast='255.255.255.255',
 			int $port=7
 		){
-			$socket=socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+			$socket=socket_create(
+				AF_INET,
+				SOCK_DGRAM,
+				SOL_UDP
+			);
 
 			if($socket === false)
 				return false;
 
-			if(socket_set_option($socket, SOL_SOCKET, SO_BROADCAST, true) === false)
+			if(socket_set_option(
+				$socket,
+				SOL_SOCKET,
+				SO_BROADCAST,
+				true
+			) === false)
 				return false;
 
 			$packet=sprintf(
@@ -35,7 +44,11 @@
 				str_repeat(chr(255), 6),
 				str_repeat(pack(
 					'H*',
-					preg_replace('/[^0-9a-fA-F]/', '', $mac)
+					preg_replace(
+						'/[^0-9a-fA-F]/',
+						'',
+						$mac
+					)
 				), 16)
 			);
 
@@ -60,7 +73,9 @@
 	{
 		function wake_on_lan()
 		{
-			throw new wake_on_lan_exception('sockets extension is not loaded');
+			throw new wake_on_lan_exception(
+				'sockets extension is not loaded'
+			);
 		}
 	}
 ?>

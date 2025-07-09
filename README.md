@@ -12,6 +12,7 @@ Unofficial additions
 * `webdevsh.php` - interface for `webdevsh.php` library
 
 ## PHP libraries
+* `anper_predis_collector.php` - `anper/predis-collector` patch
 * `array_tree.php` - convert flat array into tree, tree to list
 * `blog_page_slicer.php` - select n elements from array at start point
 * `blog_page_slicer_old.php` - select n elements from array at start point (old version - for historical purposes)
